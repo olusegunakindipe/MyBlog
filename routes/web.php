@@ -32,6 +32,7 @@ Route::group(['prefix' =>'admin', 'middleware' => 'auth'], function(){
     // Route::post('/post/store', 'PostsController@store')->name('post.store');
 
     Route::resource('/category', 'CategoriesController');
+    Route::resource('/tag', 'TagsController');
 
     Route::get('/posts/trashed', 'PostsController@trashed')->name('post.trashed');
     Route::delete('/posts/kill/{post}', 'PostsController@kill')->name('post.kill');
