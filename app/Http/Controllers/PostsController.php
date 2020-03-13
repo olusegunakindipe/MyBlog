@@ -112,11 +112,7 @@ class PostsController extends Controller
      */
     public function update(Request $request, Post $post)
     {
-        $this->validate($request, [
-            'title'=> 'required|max:255',
-            'content' => 'required',
-            'category_id' => 'required'
-        ]);
+
         //steps in uploading a file
         if($request->hasFile('featured')){ //check if a file with the filename is uploaded
             $featured = $request->featured; //assign the file to a variable
