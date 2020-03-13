@@ -84,10 +84,13 @@
                                 <a href="{{route('home')}}">Home</a>
                             </li>
                             <li class="list-group-item">
-                                <a href="{{route('category.index')}}">Category</a>
+                                <a href="{{route('category.index')}}">Categories</a>
                             </li>
                             <li class="list-group-item">
-                                <a href="{{route('post.index')}}"> Post </a>
+                                <a href="{{route('post.index')}}"> Posts </a>
+                            </li>
+                            <li class="list-group-item">
+                                <a href="{{route('tag.index')}}"> Tags </a>
                             </li>
                             <li class="list-group-item">
                                 <a href="{{route('post.trashed')}}"> Trash </a>
