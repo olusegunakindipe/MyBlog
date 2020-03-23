@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Category;
+use App\Profile;
+use Auth;
 use Session;
 use App\Http\Requests\CreateCategoryRequest;
 class CategoriesController extends Controller
@@ -15,7 +17,8 @@ class CategoriesController extends Controller
      */
     public function index()
     {
-        return view('admin.categories.index')->with('categories', Category::all());
+        return view('admin.categories.index')->with('categories', Category::all())
+                                            ->with('user', Auth::user());
     }
 
     /**
@@ -68,7 +71,7 @@ class CategoriesController extends Controller
      */
     public function edit(Category $category)
     {
-        return view("admin.categories.create")->with('category', $category);
+        return view("admin.categories.create")->with('category', $category)->with('user', Auth::user());
     }
 
     /**
