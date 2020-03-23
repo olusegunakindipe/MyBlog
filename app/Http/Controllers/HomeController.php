@@ -1,6 +1,9 @@
 <?php
 
 namespace App\Http\Controllers;
+use App\Post;
+use App\Category;
+use App\User;
 
 use Illuminate\Http\Request;
 
@@ -23,6 +26,10 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('home');
+        // $admin= User::where('admin', 1)->get();
+        return view('admin.home')->with('posts', Post::all())
+                                ->with('categories', Category::all())
+                                ->with('trashed', Post::onlyTrashed())
+                                ->with('users',User::all());
     }
 }
