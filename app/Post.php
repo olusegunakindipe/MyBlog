@@ -1,17 +1,28 @@
 <?php
 
 namespace App;
-use App\Category;
+
+
 use Illuminate\Database\Eloquent\SoftDeletes;
+
 class Post extends Model
 {
 
     use SoftDeletes;
     public function category()
     {
-        return $this->belongsTo('Category');
+        return $this->belongsTo('App\Category');
     }
 
+    public function tags()
+    {
+        return $this->belongsToMany('App\Tag');
+    }
+
+    public function user()
+    {
+        return $this->belongsTo('App\User');
+    }
 
     //Accessor for displaying the full path of an image
 
@@ -19,6 +30,6 @@ class Post extends Model
     {
        return asset($featured); 
     }
-
+  
     protected $dates = ['deleted_at'];
 }

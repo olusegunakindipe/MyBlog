@@ -3,8 +3,11 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Tag;
 use App\Post;
 use App\Category;
+use Auth;
+use File;
 use Illuminate\Support\Str;
 use App\Http\Requests\CreatePostRequest;
 
@@ -29,13 +32,20 @@ class PostsController extends Controller
     public function create()
     {
         $categories = Category::all();
+        $tags = Tag::all();
         if($categories->count() == 0){
 
             Session::flash('info', 'You must create a category before you create a post');
             return redirect()->back();
         }
+        if($tags->count() == 0){
 
-        return view('admin.posts.create')->with('categories', $categories);
+            Session::flash('info', 'You must create a tag before you create a post');
+            return redirect()->back();
+        }
+
+        return view('admin.posts.create')->with('categories', $categories)
+                                         -> with('tags', Tag::all());
     }
 
     /**
@@ -46,7 +56,7 @@ class PostsController extends Controller
      */
     public function store(CreatePostRequest $request)
     {
-        
+       
         $featured = $request->featured; //get the request image
 
         $featured_new = time().$featured->getClientOriginalName();// give the picture a new name
@@ -55,14 +65,14 @@ class PostsController extends Controller
 
        //using another method to store data in the database
     //Note- This u=is generate mass assignment problem
-       $post = Post::create([
+        $post = Post::create([
            'title' => $request->title,
            'featured' => 'uploads/posts/'.$featured_new,
            'content' => $request->content,
            'category_id'=>$request->category_id,
-           'slug'=>Str::slug($request->title)
+           'slug'=>Str::slug($request->title),
+           'user_id' => Auth::id()
        ]);
-       
        
         // This can be used if we dont want mass assignment --------------------------------------
         // $post = new Post;
@@ -71,6 +81,7 @@ class PostsController extends Controller
         // $post->content = $request->content;
         // $post->category_id = $request->category_id;
 
+        $post->tags()->attach($request->tags); //the tag() is the many to many relationship
         $post->save();
         Session::flash('success', 'You successfully created a post');
         return redirect()->route('post.index');
@@ -98,6 +109,7 @@ class PostsController extends Controller
     {
         return view('admin.posts.create')
         ->with('post', $post)
+        ->with('tags', Tag::all())
         ->with('categories', Category::all())
 
         ;
@@ -110,28 +122,30 @@ class PostsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Post $post)
+    public function update(CreatePostRequest $request, Post $post)
     {
-        $this->validate($request, [
-            'title'=> 'required|max:255',
-            'content' => 'required',
-            'category_id' => 'required'
-        ]);
-        //steps in uploading a file
-        if($request->hasFile('featured')){ //check if a file with the filename is uploaded
-            $featured = $request->featured; //assign the file to a variable
+        
+        $previousImage = parse_url($post->featured);
+        $path =$previousImage['path'];
 
+        if($request->hasFile('featured')){ //check if a file with the filename is uploaded           $featured = $request->featured; //assign the file to a variable
+
+            $featured = $request->featured;
             $featured_new = time() . $featured->getClientOriginalName(); //assign a new name 
             
             $featured->move('uploads/posts', $featured_new); // move the file  with the new name to the directory
 
             $post->featured = 'uploads/posts/'.$featured_new;
+       
+           File::delete(public_path($path));
         }
-
+ //steps in uploading a file
+ 
         $post->title = $request->title;
         $post->content = $request->content;
         $post->category_id = $request->category_id;
 
+        $post->tags()->sync($request->tags);
 
         $post->save();
         Session::flash('success', 'You successfully updated a post');

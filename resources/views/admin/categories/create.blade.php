@@ -21,7 +21,7 @@
                 
                 
                 <div class="form-group text-center">
-                    <button type="submit" class="btn btn-success">{{isset($category) ?' Edit Category':'Store Category'}}</button>
+                    <button type="submit" class="btn btn-success">{{isset($category) ?' Update Category':'Store Category'}}</button>
                 </div>
             </form>
 
