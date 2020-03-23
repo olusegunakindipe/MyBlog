@@ -3,32 +3,32 @@
 @section('content')
     <div class="card">
         <div class="card-header">
-            <h4>Trashed Posts</h4>
+            <h4>Trashed Users</h4>
         </div>
         <div class="card-body">
-            @if($posts->count() >0)
+            @if($users->count() >0)
                 <table class="table table-hover">
                     <thead>
                         <th> Image</th>
-                        <th> Post Title</th>
+                        <th> User Name</th>
                         <th> Restore </th>
                         <th> Destroy </th>
                     </thead>
                     <tbody>
-                        @foreach($posts as $post)
+                        @foreach($users as $user)
                             <tr>
-                                <td><img src="{{ $post->featured}}" style="height: 50px; width: 50px"></td>
+                                <td><img src="{{$user->profile->avatar}}" style="height: 50px; width: 50px"></td>
 
-                                <td>{{$post->title}}</td>
+                                <td>{{$user->name}}</td>
                             
                                 <td> 
-                                    <a href="{{route('post.restore', $post->id)}}" class="btn btn-xs btn-info"> 
+                                    <a href="{{route('user.restore', $user->id)}}" class="btn btn-xs btn-info"> 
                                         Restore
                                     </a>
                                 </td>
                             
                                 <td>
-                                    <form action="{{route('post.kill', $post->id)}}" method="POST">
+                                    <form action="{{route('user.kill', $user->id)}}" method="POST">
                                         @csrf
                                         @Method('DELETE')
                                         <button class="btn btn-xs btn-danger"> 
@@ -43,7 +43,7 @@
 
                 </table>
                 @else
-                    <h2 class="text-center"> No Trashed Posts </h2>   
+                    <h2 class="text-center"> No Trashed User </h2>   
             @endif
         </div>
     </div>

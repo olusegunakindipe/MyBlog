@@ -7,10 +7,8 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ config('app.name', 'Laravel') }}</title>
+    <title>{{ config('app.name', "Fergie's Blog") }}</title>
 
-    <!-- Scripts -->
-    <script src="{{ asset('js/app.js') }}" defer></script>
 
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
@@ -19,13 +17,14 @@
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     <link href="{{ asset('css/toastr.min.css') }}" rel="stylesheet">
+    @yield('styles')
 </head>
 <body>
     <div id="app">
         <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
             <div class="container">
-                <a class="navbar-brand" href="{{ url('/') }}">
-                    {{ config('app.name', 'Laravel') }}
+                <a class="navbar-brand" href="{{ route('home') }}">
+                   MyBlog
                 </a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
                     <span class="navbar-toggler-icon"></span>
@@ -92,8 +91,20 @@
                             <li class="list-group-item">
                                 <a href="{{route('tag.index')}}"> Tags </a>
                             </li>
+                            @if(Auth::user()->admin)
+                                <li class="list-group-item">
+                                    <a href="{{route('user.index')}}"> Users </a>
+                                </li>
+                                <li class="list-group-item">
+                                    <a href="{{route('settings.setting')}}"> Settings</a>
+                                </li>
+                                <li class="list-group-item">
+                                    <a href="{{route('user.trashed')}}"> Trashed Users</a>
+                                </li>
+                           
+                            @endif
                             <li class="list-group-item">
-                                <a href="{{route('post.trashed')}}"> Trash </a>
+                                <a href="{{route('post.trashed')}}"> Trashed Posts</a>
                             </li>
                         </ul>                    
                     </div>
@@ -106,7 +117,10 @@
             </div>
         </main>
     </div>
-    <script src="/js/app.js"></script>
+    <script src="{{asset('js/app.js')}}"></script>
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"  crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"  crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"  crossorigin="anonymous"></script>
     <script src="{{ asset('js/toastr.min.js')}}"></script>
     <script>
         @if(Session::has('success'))
@@ -118,5 +132,6 @@
         @endif
     
     </script>
+    @yield('scripts')
 </body>
 </html>
