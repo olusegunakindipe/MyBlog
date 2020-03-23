@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Seeder;
 use App\User;
+use App\Profile;
 class UsersTableSeeder extends Seeder
 {
     /**
@@ -11,10 +12,19 @@ class UsersTableSeeder extends Seeder
      */
     public function run()
     {
-        User::create([
-            'name' => 'Frank',
-            'email'=> 'Frank@gmail.com',
-            'password' => bcrypt('password')
+        $user = App\User::create([
+            'name' => 'Fergie',
+            'email'=> 'Akinfergie@gmail.com',
+            'password' => bcrypt('11111111'),
+            'admin' => 1
+        ]);
+
+        App\Profile::create([
+            'user_id' => $user->id,
+            'avatar' => 'uploads/avatars/pics.jpg',
+            'about' => 'This is about the administrator of this page',
+            'facebook' => 'facebook.com',
+            'youtube' => 'youtube.com'
         ]);
     }
 }
