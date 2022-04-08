@@ -17,9 +17,7 @@ bootstrap/
 phpunit.xml
 server.php
 /tests
-webpack.mix.js
 .editorconfig 
 .styleci.yml
-/udemy-course-blog-template-files-master
 3.1.0
 
